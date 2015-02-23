@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShipMovementController : MonoBehaviour
+public class ShipEngine : MonoBehaviour
 {	
-//	public float tilt;
 	public int speed;
 	public int turnSpeed;
 	public int strafeSpeed;
 	public int pitchSpeed;
+	public float rightingMultiplier = 0.1f;
 
 	/// <summary>
 	/// 	The look sensitivity for moving the mouse side-to-side.
@@ -32,6 +32,7 @@ public class ShipMovementController : MonoBehaviour
 	private float strafeInput;
 	private float turnInput;
 	private float pitchInput;
+	private float rotationY = 0F;
 
 	void Awake ()
 	{
@@ -59,38 +60,39 @@ public class ShipMovementController : MonoBehaviour
 	/// </summary>
 	private void doMovement ()
 	{
-//		float moveY = 0;
-//		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift))
-//			moveY -= 1;
-//		if (Input.GetKey (KeyCode.Space))
-//			moveY += 1;
-//
-		//Local velocity
-//		Vector3 locVel = new Vector3 (moveX, moveY, moveZ);
-//		//Transform the local velocity to world velocity (rigidbody velocity is relative to the world)
-//		rigidbody.velocity = transform.TransformDirection (locVel * shipController.speed);
-
+		//Strafe and thrust
 		shipRigidbody.AddRelativeForce (strafeInput * strafeSpeed, 0, thrusterInput * speed);
-		shipRigidbody.AddRelativeTorque (pitchInput * -pitchSpeed, turnInput * turnSpeed, 0f);
 
-		//Mouse look rotation
-//		float rotateX = Input.GetAxis ("Mouse Y"); //Rotating around the X axis moves the ship up and down.
-//		float rotateY = Input.GetAxis ("Mouse X"); //Rotating around the Y axis moves the ship side to side.
+		//Mouse look 
+//		shipRigidbody.AddRelativeTorque (pitchInput * -pitchSpeed, turnInput * turnSpeed, 0f);
+
+		//From MouseLook.cs //TODO: Smooth this
+		float rotationX = transform.localEulerAngles.y + turnInput * sensitivityX;
 		
-		//Rotate based on look input
-//		transform.Rotate (new Vector3 (rotateX * -sensitivityY, rotateY * sensitivityX, 0));
+		rotationY += Input.GetAxis ("Mouse Y") * sensitivityY;
+		rotationY = Mathf.Clamp (rotationY, -maxPitchDegrees, maxPitchDegrees);
+		
+		transform.localEulerAngles = new Vector3 (-rotationY, rotationX, 0);
 
 
-		//Get rotations in small angles
+		//Get current rotations in small angles
 		float localX = makeAngleSmall (transform.localEulerAngles.x);
 		float localZ = makeAngleSmall (transform.localEulerAngles.z);
 
-		//Make sure rotation is within limits
+		//Apply forces to keep the ship upright (0X, 0Z rotation is upright)
+		float rightingZ = localZ * -rightingMultiplier;
+		float rightingX = localX * -rightingMultiplier;
+
+		shipRigidbody.AddRelativeTorque (0, 0, rightingZ);
+		shipRigidbody.AddRelativeTorque (rightingX, 0, 0);
+		
+
+//		Make sure rotation is within limits
 		var clampedX = Mathf.Clamp (localX, -maxPitchDegrees, maxPitchDegrees);
 		var clampedZ = Mathf.Clamp (localZ, -maxRollDegrees, maxRollDegrees);
 //		Debug.Log ("rotateX: " + localX);
 //		Debug.Log ("clampedX: " + clampedX);
-		transform.localEulerAngles = new Vector3 (clampedX, transform.localEulerAngles.y, clampedZ);
+		transform.localEulerAngles = new Vector3 (clampedX, transform.localEulerAngles.y, transform.localEulerAngles.z);
 	}
 
 	/// <summary>

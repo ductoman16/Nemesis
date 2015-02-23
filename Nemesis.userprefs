@@ -1,10 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\ShipMovementController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Weapon.cs">
     <Files>
-      <File FileName="Assets\Scripts\Controllers\ShipMovementController.cs" Line="11" Column="17" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="46" Column="16" />
-      <File FileName="Assets\Scripts\Controllers\ShipController.cs" Line="26" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\ShipController.cs" Line="8" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\ShipEngine.cs" Line="93" Column="7" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="1" Column="1" />
+      <File FileName="Assets\Weapon.cs" Line="18" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
