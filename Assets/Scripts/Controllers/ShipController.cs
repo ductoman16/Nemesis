@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 	Misc ship control things go here
+/// </summary>
 public class ShipController : MonoBehaviour
 {
 	public int carryWeight = 30;
